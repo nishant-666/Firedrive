@@ -1,0 +1,109 @@
+.icon-container {
+  position: absolute;
+  right: 30px;
+  top: 30px;
+  display: flex;
+  gap: 30px;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.btn {
+  border: 2px solid gray;
+  color: gray;
+  background-color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.auth-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.grid-parent {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  position: relative;
+  top: 100px;
+  gap: 10px;
+  padding: 20px;
+}
+
+.grid-child {
+  border: 1px solid #c5c5c5;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  height: 100px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.preview-child{
+  border: 1px solid #c5c5c5;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  height: 200px;
+  flex-direction: column;
+  cursor: pointer;
+  border-radius: 10px;
+  gap: 10px;
+}
+
+.grid-child h4 {
+  color: #777777;
+}
+
+.folder-title{
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.back-icon{
+  position: absolute;
+  left: 30px;
+  cursor: pointer;
+}
+
+.image-preview{
+  width: 100px;
+}
+
+.progress-bar{
+  padding: 20px;
+}
+
+.progress-bar-container{
+  position: relative;
+  width: 100%;
+  top: 100px;
+}
+
+.title-container{
+  padding: 30px;
+  position: absolute;
+}
