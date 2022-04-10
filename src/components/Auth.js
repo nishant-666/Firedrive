@@ -15,7 +15,7 @@ export default function Auth() {
     const signUp = () => {
         signInWithPopup(auth, googleProvider)
         .then(res => {
-            // console.log(res.user)
+            localStorage.setItem('userEmail', res.user.email)
         })
         .catch(err => {
             console.log(err.message)

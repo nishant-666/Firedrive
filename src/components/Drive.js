@@ -9,7 +9,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/
 import {
     collection,
     addDoc,
-    onSnapshot,
+    onSnapshot
 } from 'firebase/firestore'
 
 export default function Drive({
@@ -17,9 +17,10 @@ export default function Drive({
 }) {
     let navigate = useNavigate();
     let auth = getAuth();
+    let userEmail = localStorage.getItem('userEmail')
     const storage = getStorage();
     const [progress, setProgress] = useState(null)
-    const collectionRef = collection(database, 'driveData')
+    const collectionRef = collection(database, 'driveData');
     const [folderName, setFolderName] = useState('');
     const [folders, setFolders] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -33,6 +34,7 @@ export default function Drive({
 
     const folderUpload = () => {
         addDoc(collectionRef, {
+            userEmail: userEmail,
             folderName: folderName,
             fileLink: [{
                 downloadURL: '',
@@ -72,6 +74,7 @@ export default function Drive({
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     setProgress(null)
                     addDoc(collectionRef, {
+                        userEmail: userEmail,
                         fileName: event.target.files[0].name,
                         downloadURL: downloadURL
                     })
@@ -99,12 +102,17 @@ export default function Drive({
     const logOut = () => {
         signOut(auth)
             .then(() => {
-                navigate('/')
+                localStorage.removeItem('userEmail')
+                navigate('/');
             })
             .catch(err => {
                 alert(err.message)
             })
     }
+
+    function limit (string = '', limit = 0) {  
+        return string.substring(0, limit)
+    }      
 
     const authState = () => {
         onAuthStateChanged(auth, (user) => {
@@ -129,7 +137,7 @@ export default function Drive({
             <div className='icon-container'>
                 <div class="upload-btn-wrapper">
                     <FiFilePlus
-                        color='#ffc107'
+                        color='#757575'
                         className='icon'
                         size={50} />
                     <input
@@ -145,7 +153,7 @@ export default function Drive({
                 />
 
                 <FiLogOut
-                    color='#ffc107'
+                    color='#f44336'
                     size={50}
                     className='icon'
                     onClick={logOut}
@@ -160,18 +168,25 @@ export default function Drive({
             </div>
             <div className='grid-parent'>
                 {folders.map((folder) => {
-                    return (
-                        <div
-                            className='grid-child'
-                            onClick={() => folder.folderName ? openFolder(folder.id) : openFile(folder.downloadURL)}
-                        >
-                            <h4>
-                                {folder.folderName ?
-                                    folder.folderName :
-                                    folder.fileName}
-                            </h4>
-                        </div>
-                    )
+                    if(folder.userEmail === userEmail){
+                        return (
+                            <div
+                                className='grid-child'
+                                onClick={() => folder.folderName ? openFolder(folder.id) : openFile(folder.downloadURL)}
+                            >
+                                <h4>
+                                    {
+                                    folder.folderName ?
+                                        folder.folderName :
+                                        `${limit(folder.fileName, 20)}...`
+                                    }
+                                </h4>
+                            </div>
+                        )
+                    }
+                    else{
+                        return <></>
+                    }
                 })}
             </div>
             <Modal

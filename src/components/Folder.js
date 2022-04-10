@@ -11,6 +11,7 @@ export default function Folder({
     const storage = getStorage();
     let navigate = useNavigate()
     let params = useParams();
+    let userEmail = localStorage.getItem('userEmail')
     const [folders, setFolders] = useState([]);
     const [progress, setProgress] = useState(null)
     const [folderName, setFolderName] = useState('')
@@ -71,12 +72,13 @@ export default function Folder({
                 <FiArrowLeftCircle
                     size={50}
                     onClick={goBack}
+                    color='#757575'
                 />
             </div>
             <div className='icon-container'>
                 <div class="upload-btn-wrapper">
                     <FiFilePlus
-                        color='#ffc107'
+                        color='#757575'
                         className='icon'
                         size={50} />
                     <input
@@ -95,21 +97,26 @@ export default function Folder({
             )}
             <div className='grid-parent'>
                 {folders?.map((folder) => {
-                    return (
-                        <>
-                            {folder.downloadURL !== '' ? (
-                                <div
-                                    className='preview-child'
-                                    onClick={() => openFile(folder.downloadURL)}
-                                >   <img className='image-preview'
-                                    src={folder.downloadURL} alt='image' />
-                                    <h5>{folder.fileName}</h5>
-                                </div>
-                            ) : (
-                                ""
-                            )}
-                        </>
-                    )
+                    if (folder.userEmail === userEmail) {
+                        return (
+                            <>
+                                {folder.downloadURL !== '' ? (
+                                    <div
+                                        className='preview-child'
+                                        onClick={() => openFile(folder.downloadURL)}
+                                    >   <img className='image-preview'
+                                        src={folder.downloadURL} alt='image' />
+                                        <h5>{folder.fileName}</h5>
+                                    </div>
+                                ) : (
+                                    ""
+                                )}
+                            </>
+                        )
+                    }
+                    else {
+                        return <></>
+                    }
                 })}
             </div>
         </div>
