@@ -4,7 +4,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { FiArrowLeftCircle } from 'react-icons/fi';
 import ProgressBar from './ProgressBar';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { updateDoc, doc, onSnapshot } from 'firebase/firestore'
+import { updateDoc, doc, onSnapshot } from 'firebase/firestore';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Folder({
     database
 }) {
@@ -25,7 +27,9 @@ export default function Folder({
                 setProgress(Math.round(progress))
             },
             (error) => {
-                console.log(error.message)
+                toast.error(error.message, {
+                    autoClose: 1500
+                });
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -34,6 +38,16 @@ export default function Folder({
                             downloadURL: downloadURL,
                             fileName: event.target.files[0].name
                         }]
+                    })
+                    .then(() => {
+                        toast.success("File Added", {
+                            autoClose: 1500
+                        });
+                    })
+                    .catch((error) => {
+                        toast.success(error.message, {
+                            autoClose: 1500
+                        });
                     })
                 });
             }
@@ -60,6 +74,7 @@ export default function Folder({
     }, [])
     return (
         <div>
+            <ToastContainer />
             <div className='back-icon'>
                 <FiArrowLeftCircle
                     size={50}

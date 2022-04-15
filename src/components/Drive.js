@@ -10,7 +10,11 @@ import {
     collection,
     addDoc,
     onSnapshot
-} from 'firebase/firestore'
+} from 'firebase/firestore';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function Drive({
     database
@@ -43,11 +47,14 @@ export default function Drive({
         })
             .then(() => {
                 setIsModalVisible(false);
+                toast.success("Folder Added", {
+                    autoClose: 1500
+                });
                 // alert('Folder Added')
                 setFolderName('')
             })
             .catch(err => {
-                alert(err.message)
+                toast.error(err.message)
             })
     }
 
@@ -60,7 +67,9 @@ export default function Drive({
                 setProgress(Math.round(progress))
             },
             (error) => {
-                console.log(error.message)
+                toast.error(error.message, {
+                    autoClose: 1500
+                });
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -69,6 +78,16 @@ export default function Drive({
                         userEmail: userEmail,
                         fileName: event.target.files[0].name,
                         downloadURL: downloadURL
+                    })
+                    .then(() => {
+                        toast.success("File Added", {
+                            autoClose: 1500
+                        });
+                    })
+                    .catch((err) => {
+                        toast.error(err.message, {
+                            autoClose: 1500
+                        });
                     })
                 });
             }
@@ -94,11 +113,18 @@ export default function Drive({
     const logOut = () => {
         signOut(auth)
             .then(() => {
-                localStorage.removeItem('userEmail')
-                navigate('/');
+                localStorage.removeItem('userEmail');
+                toast.success('Logged Out', {
+                    autoClose: 1500
+                });
+                setTimeout(() => {
+                    navigate('/');
+                }, 1500)
             })
             .catch(err => {
-                alert(err.message)
+                toast.error(err.message, {
+                    autoClose: 1500
+                });
             })
     }
 
@@ -123,6 +149,7 @@ export default function Drive({
     }, [])
     return (
         <div>
+            <ToastContainer />
             <div className='title-container'>
                 <h1>FireDrive</h1>
             </div>
